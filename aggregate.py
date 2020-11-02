@@ -74,7 +74,7 @@ with open("feed.html", "a") as file:
     file.write(f"""
     <h2>Weather Forecast</h2>
         <p>Today's weather: {weather['weather'][0]['description'].capitalize()} 
-            <span>
+            <span style="max-height:inherit">
                 <img src='https://openweathermap.org/img/wn/{weather["weather"][0]["icon"]}.png'/>
             </span>
         </p>
