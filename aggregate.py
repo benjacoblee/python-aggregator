@@ -21,7 +21,7 @@ class Reddit:
         my_feed = [{"subreddit": submission.subreddit.display_name, "title": submission.title, "score": submission.score,
                     "url": submission.url} for submission in reddit.subreddit(subreddit).top("day", limit=5)]
 
-        return sorted(my_feed, key=lambda x: x["subreddit"])
+        return my_feed
 
 
 class CNA:
@@ -73,9 +73,12 @@ with open("feed.html", "w") as file:
 with open("feed.html", "a") as file:
     file.write(f"""
     <h2>Weather Forecast</h2>
-    <p>Today's weather: {weather['weather'][0]['description'].capitalize()}</p>
+        <p>Today's weather: {weather['weather'][0]['description'].capitalize()} 
+            <span>
+                <img src='https://openweathermap.org/img/wn/{weather["weather"][0]["icon"]}.png'/>
+            </span>
+        </p>
     <h2>Reddit</h2>
-    
     """)
 
 r = Reddit()
