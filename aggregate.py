@@ -1,38 +1,19 @@
-import urllib
 import os
-import requests
 import datetime
-import subprocess
-
 import praw
-import pprint
-
 import feedparser
-
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
+
+import weather
 
 load_dotenv()
 
-client_id = os.getenv("client_id")
-client_secret = os.getenv("client_secret")
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 
-print(client_id)
-
-
-reddit = praw.Reddit(client_id=client_id, client_secret=client_secret, grant_type_access='client_credentials',
+reddit = praw.Reddit(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, grant_type_access='client_credentials',
                      user_agent='script/1.0')
-
-
-# class Reddit:
-#     def ReturnMyFeed(self):
-#         myfeed = [submission for submission in reddit.subreddi]
-#         for submission in reddit.subreddit("rollerblading+python+frontend+reactjs+webdev").top("week"):
-
-#             title, score, url = submission.title, submission.score, submission.url
-
-#             print(
-#                 f"Posted in {submission.subreddit}: {title} - {score} upvotes")
 
 
 class Reddit:
@@ -69,6 +50,11 @@ class Medium:
         ).entries
 
 
+latitude = weather.LATITUDE
+longitude = weather.LONGITUDE
+weather = weather.get_weather()
+
+
 with open("feed.html", "w") as file:
     file.write(f"""
     <!DOCTYPE html>
@@ -81,8 +67,14 @@ with open("feed.html", "w") as file:
     </head>
     <body>
     <div class="container mb-5">
-    <h1> Your feed </h1>
-    <h2>Reddit Feed</h2>
+    <h1>Your feed</h1>
+    """)
+
+with open("feed.html", "a") as file:
+    file.write(f"""
+    <h2>Weather Forecast</h2>
+    <p>Today's weather: {weather['weather'][0]['description'].capitalize()}</p>
+    <h2>Reddit</h2>
     <ul>
     """)
 
@@ -101,14 +93,18 @@ with open("feed.html", "a") as file:
 
 cna = CNA()
 
+card_style = "position:relative;display:flex;flex-direction:column;background-color:#fff;background-clip:border-box;border:1px solid rgba(0,0,0,.125); border-radius:.25rem; margin-bottom:1rem;"
+
+card_body = "flex:1 1 auto;min-height:1px;padding:1.25rem"
+
 with open("feed.html", "a") as file:
-    file.write("<h4>Latest News</h4>")
+    file.write("<h3>Latest News</h3>")
 
 for entry in cna.latest_news():
     with open("feed.html", "a") as file:
         file.write(f"""
-        <div class="card mb-2">
-        <div class="card-body">
+        <div style="{card_style}">
+        <div style="{card_body}">
         <a href="{entry["id"]}">{entry["title"]}</a>
         <p>{entry["summary"]}</p>
         </div>
@@ -116,13 +112,13 @@ for entry in cna.latest_news():
         """)
 
 with open("feed.html", "a") as file:
-    file.write("<h4>Local News</h4>")
+    file.write("<h3>Local News</h3>")
 
 for entry in cna.local_news():
     with open("feed.html", "a") as file:
         file.write(f"""
-        <div class="card mb-2">
-        <div class="card-body">
+        <div style="{card_style}">
+        <div style="{card_body}">
         <a href="{entry["id"]}">{entry["title"]}</a>
         <p>{entry["summary"]}</p>
         </div>
