@@ -17,9 +17,9 @@ reddit = praw.Reddit(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, grant_typ
 
 
 class Reddit:
-    def Top(self):
-        my_feed = [{"subreddit": submission.subreddit.display_name, "title": submission.title, "score": submission.score, "url": submission.url} for submission in reddit.subreddit(
-            "rollerblading+python+frontend+reactjs+webdev").top("day", limit=25)]
+    def Top(self, subreddit):
+        my_feed = [{"subreddit": submission.subreddit.display_name, "title": submission.title, "score": submission.score,
+                    "url": submission.url} for submission in reddit.subreddit(subreddit).top("day", limit=5)]
 
         return sorted(my_feed, key=lambda x: x["subreddit"])
 
@@ -75,21 +75,36 @@ with open("feed.html", "a") as file:
     <h2>Weather Forecast</h2>
     <p>Today's weather: {weather['weather'][0]['description'].capitalize()}</p>
     <h2>Reddit</h2>
-    <ul>
+    
     """)
 
 r = Reddit()
 
-for post in r.Top():
+
+def fetch_subs_and_write(sub):
     with open("feed.html", "a") as file:
         file.write(f"""
-        <a href="{post["url"]}"><li>Posted in r/{post["subreddit"]}: {post["title"]} - {post["score"]} upvotes</li></a>
+        <h3>Posts from r/{sub}</h3>
+            <ul>
         """)
+    for post in r.Top(sub):
+        with open("feed.html", "a") as file:
+            file.write(f"""
+            <a href="{post["url"]}"><li>{post["title"]} - {post["score"]} upvotes</li></a>
+            """)
+    with open("feed.html", "a") as file:
+        file.write("</ul>")
+
+
+fetch_subs_and_write("reactjs")
+fetch_subs_and_write("webdev")
+fetch_subs_and_write("frontend")
+fetch_subs_and_write("python")
+fetch_subs_and_write("rollerblading")
+
 
 with open("feed.html", "a") as file:
-    file.write("""</ul>
-    <h2>CNA</h2>
-    """)
+    file.write("<h2>CNA</h2>")
 
 cna = CNA()
 
