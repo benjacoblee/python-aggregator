@@ -54,7 +54,7 @@ latitude = weather.LATITUDE
 longitude = weather.LONGITUDE
 weather = weather.get_weather()
 
-
+today = datetime.date.today()
 with open("feed.html", "w") as file:
     file.write(f"""
     <!DOCTYPE html>
@@ -67,7 +67,7 @@ with open("feed.html", "w") as file:
     </head>
     <body>
     <div class="container mb-5">
-    <h1>Your feed</h1>
+    <h1>Your feed for {today.strftime('%d %b %Y')}</h1>
     """)
 
 with open("feed.html", "a") as file:
@@ -113,7 +113,9 @@ cna = CNA()
 
 card_style = "position:relative;display:flex;flex-direction:column;background-color:#fff;background-clip:border-box;border:1px solid rgba(0,0,0,.125); border-radius:.25rem; margin-bottom:1rem;"
 
-card_body = "flex:1 1 auto;min-height:1px;padding:1.25rem"
+card_body = "display:flex;flex-direction:row;justify-content:space-between;max-width:100%;flex:1 1 auto;min-height:1px;padding:1.25rem"
+
+card_img_container = "max-width:50%"
 
 with open("feed.html", "a") as file:
     file.write("<h3>Latest News</h3>")
@@ -122,10 +124,14 @@ for entry in cna.latest_news():
     with open("feed.html", "a") as file:
         file.write(f"""
         <div style="{card_style}">
-        <div style="{card_body}">
-        <a href="{entry["id"]}">{entry["title"]}</a>
-        <p>{entry["summary"]}</p>
-        </div>
+            <div style="{card_body}">
+                <div style="{card_img_container}">
+                    <img style="max-width:80%" src={entry["media_thumbnail"][0]["url"]}/>
+                </div>
+                <div> 
+                    <a href="{entry["id"]}">{entry["title"]}</a>
+                </div>
+            </div>
         </div>
         """)
 
@@ -136,10 +142,14 @@ for entry in cna.local_news():
     with open("feed.html", "a") as file:
         file.write(f"""
         <div style="{card_style}">
-        <div style="{card_body}">
-        <a href="{entry["id"]}">{entry["title"]}</a>
-        <p>{entry["summary"]}</p>
-        </div>
+            <div style="{card_body}">
+                <div style="{card_img_container}">
+                    <img style="max-width:80%" src={entry["media_thumbnail"][0]["url"]}/>
+                </div>
+                <div> 
+                    <a href="{entry["id"]}">{entry["title"]}</a>
+                </div>
+            </div>
         </div>
         """)
 
