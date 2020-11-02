@@ -16,7 +16,6 @@ def get_weather():
         f"https://api.openweathermap.org/data/2.5/onecall?lat={LATITUDE}&lon={LONGITUDE}&APPID={WEATHER_API_KEY}")
     forecast = res.json()['daily'][0]
     # today_weather = forecast['weather'][0]['description']
-    print(forecast["weather"][0]["icon"])
     return forecast
 # if 'rain' in today_weather:
 #     requests.get(f'https://api.telegram.org/bot{BOT_API_KEY}/sendMessage',
