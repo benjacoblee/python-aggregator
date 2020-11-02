@@ -130,7 +130,7 @@ for entry in cna.latest_news():
                     <img style="max-width:80%" src={entry["media_thumbnail"][0]["url"]}/>
                 </div>
                 <div> 
-                    <a style="font-size:1rem" href="{entry["id"]}">{entry["title"]}</a>
+                    <a style="font-size:0.8rem" href="{entry["id"]}">{entry["title"]}</a>
                 </div>
             </div>
         </div>
@@ -148,7 +148,7 @@ for entry in cna.local_news():
                     <img style="max-width:80%" src={entry["media_thumbnail"][0]["url"]}/>
                 </div>
                 <div> 
-                    <a style="font-size:1rem" href="{entry["id"]}">{entry["title"]}</a>
+                    <a style="font-size:0.8rem" href="{entry["id"]}">{entry["title"]}</a>
                 </div>
             </div>
         </div>
