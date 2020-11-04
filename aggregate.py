@@ -15,7 +15,9 @@ longitude = weather.LONGITUDE
 weather = weather.get_weather()
 events = events.get_events()
 
-with open("feed.html", "w") as file:
+feed_path = "/mnt/c/Users/User/Documents/code/projects/python-aggregator/feed.html"
+
+with open(feed_path, "w") as file:
     file.write(f"""
     <!DOCTYPE html>
         <html lang="en">
@@ -29,7 +31,7 @@ with open("feed.html", "w") as file:
             <h1>Your feed for {today.strftime('%d %b %Y')}</h1>
     """)
 
-with open("feed.html", "a") as file:
+with open(feed_path, "a") as file:
     file.write(f"""
     <h2>Weather Forecast</h2>
         <p>Today's weather: {weather['weather'][0]['description'].capitalize()} 
@@ -45,12 +47,12 @@ for event in events:
     tmfmt = '%d %b %H:%M %p'
     start = event['start'].get('dateTime', event['start'].get('date'))
     date = dt.strftime(dtparse(start), format=tmfmt)
-    with open("feed.html", "a") as file:
+    with open(feed_path, "a") as file:
         file.write(f"""
         <li>{event['summary']} {date}</li>
         """)
 
-with open("feed.html", "a") as file:
+with open(feed_path, "a") as file:
     file.write("""
     </ul>
     <h2>Reddit</h2>
@@ -66,7 +68,7 @@ r.fetch_subs_and_write("python")
 r.fetch_subs_and_write("rollerblading")
 
 
-with open("feed.html", "a") as file:
+with open(feed_path, "a") as file:
     file.write("<h2>CNA</h2>")
 
 cna = CNA()
@@ -76,7 +78,7 @@ cna.write_news("Local")
 
 medium = Medium()
 
-with open("feed.html", "a") as file:
+with open(feed_path, "a") as file:
     file.write(f"""
             </div>
         </body>
