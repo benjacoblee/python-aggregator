@@ -1,10 +1,10 @@
-import datetime
 from dateutil.parser import parse as dtparse
+import datetime
 from datetime import datetime as dt
 
-import weather
-import events
 
+from Weather import Weather
+from Events import Events
 from Reddit import Reddit
 from CNA import CNA
 from Medium import Medium
@@ -12,10 +12,6 @@ from Medium import Medium
 from feed_path import feed_path
 
 today = datetime.date.today()
-latitude = weather.LATITUDE
-longitude = weather.LONGITUDE
-weather = weather.get_weather()
-events = events.get_events()
 
 with open(feed_path, "w") as file:
     file.write(f"""
@@ -31,34 +27,16 @@ with open(feed_path, "w") as file:
             <h1>Your feed for {today.strftime('%d %b %Y')}</h1>
     """)
 
-with open(feed_path, "a") as file:
-    file.write(f"""
-    <h2>Weather Forecast</h2>
-        <p>Today's weather: {weather['weather'][0]['description'].capitalize()} 
-            <span style="max-height:inherit">
-                <img src='https://openweathermap.org/img/wn/{weather["weather"][0]["icon"]}.png'/>
-            </span>
-        </p>
-    <h2>Upcoming Events</h2>
-        <ul>
-    """)
+w = Weather()
+w.write_weather()
 
-for event in events:
-    tmfmt = '%d %b %H:%M %p'
-    start = event['start'].get('dateTime', event['start'].get('date'))
-    date = dt.strftime(dtparse(start), format=tmfmt)
-    with open(feed_path, "a") as file:
-        file.write(f"""
-        <li>{event['summary']} {date}</li>
-        """)
-
-with open(feed_path, "a") as file:
-    file.write("""
-    </ul>
-    <h2>Reddit</h2>
-    """)
+e = Events()
+e.write_events()
 
 r = Reddit()
+
+with open(feed_path, "a") as file:
+    file.write("<h2>Reddit</h2>")
 
 
 r.fetch_subs_and_write("reactjs")
@@ -76,7 +54,7 @@ cna = CNA()
 cna.write_news("Latest")
 cna.write_news("Local")
 
-medium = Medium()
+# medium = Medium()
 
 with open(feed_path, "a") as file:
     file.write(f"""
