@@ -1,5 +1,7 @@
 import feedparser
 
+from feed_path import feed_path
+
 
 class CNA:
     card_style = "position:relative;display:flex;flex-direction:column;background-color:#fff;background-clip:border-box;border:1px solid rgba(0,0,0,.125); border-radius:.25rem; margin-bottom:1rem;"
@@ -18,7 +20,7 @@ class CNA:
         return newsfeed
 
     def iterate_over_news(self, entry):
-        with open("feed.html", "a") as file:
+        with open(feed_path, "a") as file:
             file.write(f"""
                     <div style="{self.card_style}">
                         <div style="{self.card_body}">
@@ -33,7 +35,7 @@ class CNA:
                     """)
 
     def write_news(self, type):
-        with open("feed.html", "a") as file:
+        with open(feed_path, "a") as file:
             file.write(f"<h3>{type} News</h3>")
         if type == "Latest":
             for entry in self.news(type):

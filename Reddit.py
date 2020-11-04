@@ -1,6 +1,8 @@
 import os
 import praw
 
+from feed_path import feed_path
+
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 
@@ -16,17 +18,17 @@ class Reddit:
         return my_feed
 
     def fetch_subs_and_write(self, sub):
-        with open("feed.html", "a") as file:
+        with open(feed_path, "a") as file:
             file.write(f"""
             <h3>Posts from r/{sub}</h3>
                 <ul>
             """)
         for post in self.Top(sub):
-            with open("feed.html", "a") as file:
+            with open(feed_path, "a") as file:
                 file.write(f"""
                 <a href="{post["url"]}">
                     <li>{post["title"]} - {post["score"]} upvotes</li>
                 </a>
                 """)
-        with open("feed.html", "a") as file:
+        with open(feed_path, "a") as file:
             file.write("</ul>")

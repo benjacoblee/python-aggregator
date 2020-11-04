@@ -9,13 +9,13 @@ from Reddit import Reddit
 from CNA import CNA
 from Medium import Medium
 
+from feed_path import feed_path
+
 today = datetime.date.today()
 latitude = weather.LATITUDE
 longitude = weather.LONGITUDE
 weather = weather.get_weather()
 events = events.get_events()
-
-feed_path = "/mnt/c/Users/User/Documents/code/projects/python-aggregator/feed.html"
 
 with open(feed_path, "w") as file:
     file.write(f"""
